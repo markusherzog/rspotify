@@ -15,6 +15,15 @@ module OmniAuth
 
       info { raw_info }
 
+      credentials do
+        hash = {"token" => access_token.token}
+        hash["refresh_token"] = access_token.refresh_token if access_token.expires? && access_token.refresh_token
+        hash["expires_at"] = access_token.expires_at if access_token.expires?
+        hash["expires"] = access_token.expires?
+        hash["scope"] = access_token['scope']
+        hash
+      end
+
       def raw_info
         @raw_info ||= access_token.get('me').parsed
       end
