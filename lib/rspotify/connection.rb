@@ -58,6 +58,7 @@ module RSpotify
       url = path.start_with?('http') ? path : API_URI + path
       url, query = *url.split('?')
       url = Addressable::URI.encode(url)
+      url = url.gsub('#', '%23')
       url << "?#{query}" if query
 
       begin
