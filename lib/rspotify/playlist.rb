@@ -128,8 +128,11 @@ module RSpotify
 
       super(options)
 
-      @path = "users/#{@owner.instance_variable_get('@id').gsub('?','')}/"
-      @path << (@href =~ /\/starred$/ ? 'starred' : "playlists/#{@id}")
+      @path = if @href =~ /\/starred$/ 
+        "users/#{@owner.instance_variable_get('@id').gsub('?','')}/starred" 
+      else
+        "playlists/#{@id}"
+      end
     end
 
     # Adds one or more tracks to a playlist in user's Spotify account. This method is only available when the
@@ -315,7 +318,7 @@ module RSpotify
 
       params = {
         method: :delete,
-        url: URI::encode(RSpotify::API_URI + @path + '/tracks'),
+        url: Addressable::URI.encode(RSpotify::API_URI + @path + '/tracks'),
         headers: User.send(:oauth_header, @owner.id),
         payload: positions ? { positions: positions } : { tracks: tracks }
       }

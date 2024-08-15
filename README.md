@@ -1,7 +1,7 @@
 # RSpotify
 
 [![Gem Version](https://badge.fury.io/rb/rspotify.svg)](http://badge.fury.io/rb/rspotify)
-[![Build Status](https://travis-ci.org/guilhermesad/rspotify.svg?branch=master)](https://travis-ci.org/guilhermesad/rspotify)
+[![Build Status](https://github.com/guilhermesad/rspotify/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/guilhermesad/rspotify/actions)
 
 This is a ruby wrapper for the [Spotify Web API](https://developer.spotify.com/web-api).
 
@@ -31,7 +31,7 @@ RSpotify was designed with usability as its primary goal, so that you can forget
 
 You can write things like `my_playlist.tracks.sort_by(&:popularity).last.album` without having to think which API calls must be done. RSpotify fills the gaps for you.
 
-Below are some basic usage examples. Check the [documentation](http://rdoc.info/github/guilhermesad/rspotify/master/frames) for the complete reference.
+Below are some basic usage examples. Check the [documentation](http://rubydoc.info/github/guilhermesad/rspotify/master/frames) for the complete reference.
 
 ```ruby
 require 'rspotify'
@@ -153,14 +153,16 @@ require 'rspotify/oauth'
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :spotify, "<your_client_id>", "<your_client_secret>", scope: 'user-read-email playlist-modify-public user-library-read user-library-modify'
 end
+
+OmniAuth.config.allowed_request_methods = [:post, :get]
 ```
 
-You should replace the scope values for the ones your own app will require from the user. You can see the list of available scopes in [here](https://developer.spotify.com/web-api/using-scopes).
+You should replace the scope values for the ones your own app will require from the user. You can see the list of available scopes in [here](https://developer.spotify.com/documentation/general/guides/authorization/scopes/).
 
 Next, make a link so the user can log in with his Spotify account:
 
 ```ruby
-<%= link_to 'Sign in with Spotify', '/auth/spotify' %>
+<%= link_to 'Sign in with Spotify', '/auth/spotify', method: :post %>
 ```
 
 And create a route to receive the callback:
